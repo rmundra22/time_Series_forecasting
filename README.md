@@ -9,9 +9,9 @@ To address the client product’s sales data using conventional time series anal
  
 Demand forecasting will continue to be one of the most important elements of the retailers’ planning process so main question that needs to be answered is to make clear projection of how much a product should sell at a specific location at a specific time and planning for demand according to local consumer preferences.
 
-  ### ● To build a Python based tool that generates fast, robust, practical and n-step forward forecasts with historical Industry-scale timeseries data.
-  ### ● Tool should offers functionalities for optimizing model fitting by allowing hyper-parameter tuning and best model selection techniques.
-  ### ● Tool procedures should be robust to abnormalities in the data like missing data, outliers (anomalies), non-linear trends, seasonality effects etc.
+  #### ● To build a Python based tool that generates fast, robust, practical and n-step forward forecasts with historical Industry-scale timeseries data.
+  #### ● Tool should offers functionalities for optimizing model fitting by allowing hyper-parameter tuning and best model selection techniques.
+  #### ● Tool procedures should be robust to abnormalities in the data like missing data, outliers (anomalies), non-linear trends, seasonality effects etc.
   
 
 # Methodological Approach (Pipeline)
@@ -45,8 +45,8 @@ To carry out performance analysis of the obtained model Client’s Evaluation Me
 
 These metric measurements are useful to determine the reliability of a prediction, and enable the expert-in-loop to decide whether or not to trust the forecast results obtained from the tuned model. The Cluster-Basepack level Integral Normalized Absolute Mean Error (INMAE) index is computed with a cross-validation procedure, which involves the time series to be split into two parts:
 
-● Training set : Approximately 83% of the total TDP’s is used to train the model.
-● Train set: It is compared with the forecast of the test dataset.
+#### ● Training set : Approximately 83% of the total TDP’s is used to train the model.
+#### ● Train set: It is compared with the forecast of the test dataset.
 
 INMAE represents the expected error of the computed forecast vs true forecast on future values averaged by true future values across all Cluster-Basepack combinations. It is a score that helps experts decide how finely our model is able to generalize. High score signify a highly accurate and generalized model that is able to predict the n-period ahead sales value at Cluster-Basepack level.
 
