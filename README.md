@@ -9,34 +9,34 @@ To address the client product’s sales data using conventional time series anal
  
 Demand forecasting will continue to be one of the most important elements of the retailers’ planning process so main question that needs to be answered is to make clear projection of how much a product should sell at a specific location at a specific time and planning for demand according to local consumer preferences.
 
-  ● To build a Python based tool that generates fast, robust, practical and n-step forward forecasts with historical Industry-scale timeseries data.
-  ● Tool should offers functionalities for optimizing model fitting by allowing hyper-parameter tuning and best model selection techniques.
-  ● Tool procedures should be robust to abnormalities in the data like missing data, outliers (anomalies), non-linear trends, seasonality effects etc.
+  ### ● To build a Python based tool that generates fast, robust, practical and n-step forward forecasts with historical Industry-scale timeseries data.
+  ### ● Tool should offers functionalities for optimizing model fitting by allowing hyper-parameter tuning and best model selection techniques.
+  ### ● Tool procedures should be robust to abnormalities in the data like missing data, outliers (anomalies), non-linear trends, seasonality effects etc.
   
 
 # Methodological Approach (Pipeline)
 
 Separate python modules with specific functionalities were deployed utilizing the techniques discussed in below mentioned section:
 
-● Preprocessing of data - Anomaly Detection
+### ● Preprocessing of data - Anomaly Detection
 To detect Outliers using Density based Spatial Clustering Algorithm (DBSCAN) and Local Outlier Probabilities (LoOP) . To use mean value or implements the Kalman Filter, Kalman Smoother, and EM Algorithm for a Linear Gaussian model to carry out Missing values Imputation.
 
-● Signal Frequency / Periodicity Detector
+### ● Signal Frequency / Periodicity Detector
 To detect the timeseries (signal) frequency using techniques like Fourier Transformation, Auto correlation function, Harmonic Product Spectrum and Counting zero crossings. The calculated frequency is used as input for decomposing timeseries into its components
 
-● Trend and Seasonality Decomposition
+### ● Trend and Seasonality Decomposition
 To detect and plot trend and seasonal components of timeseries. To implement Decomposition techniques using Baxter-King bandpass filter, Christiano Fitzgerald asymmetric random walk filter, Hodrick Prescott filter and Convolution filter. This is used when your series exhibits a cyclic pattern, with or without a trend.
 
-● Hyperparameter tuning and parameter fitting
+### ● Hyperparameter tuning and parameter fitting
 To optimally tune 21 traditional time series models like ARIMA, GARCH, GAS, Holt Winters, curve smoothing techniques, averaging methods etc. These models are trained and tested using differently explored datasets. Model’s hyper parameters and parameters are processed using Random Search Algorithm, Tree of Parzen Estimators (TPE), Limited-memory Broyden – Fletcher – Goldfarb – Shanno (L-BFGS) algorithm and Akaike Information Criterion (AIC).
 
-● Adding back seasonality and trend components
+### ● Adding back seasonality and trend components
 To take all the models with tuned hyper-parameters/ parameters and forecast sales across test dataset. To revert back the differenced series if present and then add back seasonality and trend components to the predicted series of each model. Trend component is added back using Polynomial Regression Fitting and seasonality is added back considering test data periodicity.
 
-● Best Model Selection
+### ● Best Model Selection
 To detect the best fitted model among the 21 models using a list of 11 scoring metrics like RMSE, MAPE, MFE, MAE, MFPE, SSE, NWRMSLE, RMSLE etc. To aggregate the predictions results from the all the models (weak learner) and transform it into a single model (strong learner) using ensembling techniques.
 
-● Testing fitted model using Client’s Evaluation Metric
+### ● Testing fitted model using Client’s Evaluation Metric
 To carry out performance analysis of the obtained model Client’s Evaluation Metric is calculated. It is an accuracy measure of the predicted forecast over n-periods. Performance Analysis also involves metric calculation for TDP’s [t+5 : t+7] and TDP’s [t+8 : t+10] periods which are 2 and 3 months ahead forecasts.
 
 # Evaluation Metric
