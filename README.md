@@ -36,8 +36,8 @@ To take all the models with tuned hyper-parameters/ parameters and forecast sale
 ### ● Best Model Selection
 To detect the best fitted model among the 21 models using a list of 11 scoring metrics like RMSE, MAPE, MFE, MAE, MFPE, SSE, NWRMSLE, RMSLE etc. To aggregate the predictions results from the all the models (weak learner) and transform it into a single model (strong learner) using ensembling techniques.
 
-### ● Testing fitted model using Client’s Evaluation Metric
-To carry out performance analysis of the obtained model Client’s Evaluation Metric is calculated. It is an accuracy measure of the predicted forecast over n-periods. Performance Analysis also involves metric calculation for TDP’s [t+5 : t+7] and TDP’s [t+8 : t+10] periods which are 2 and 3 months ahead forecasts.
+### ● Testing fitted model using Personlalized Evaluation Metric
+To carry out performance analysis of the obtained model Personalized Evaluation Metric is calculated. It is an accuracy measure of the predicted forecast over n-periods. Performance Analysis also involves metric calculation for TDP’s [t+5 : t+7] and TDP’s [t+8 : t+10] periods which are 2 and 3 months ahead forecasts.
 
 # Evaluation Metric
 
@@ -49,10 +49,3 @@ These metric measurements are useful to determine the reliability of a predictio
 #### ● Train set: It is compared with the forecast of the test dataset.
 
 INMAE represents the expected error of the computed forecast vs true forecast on future values averaged by true future values across all Cluster-Basepack combinations. It is a score that helps experts decide how finely our model is able to generalize. High score signify a highly accurate and generalized model that is able to predict the n-period ahead sales value at Cluster-Basepack level.
-
-        Accuracy Measure = 
-
-where, Y is the actual test dataset values.
-Y_(hat,i) is the predicted test dataset values.
-P represents no. of Cluster-Basepack combinations.
-I represents number of test data points
