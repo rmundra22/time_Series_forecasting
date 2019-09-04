@@ -1,4 +1,4 @@
-# time_Series_forecasting
+# Time Series Forecasting at Industry Scale Data
 
 This project mainly focuses on handling the crippling challenges associated with producing reliable and high quality forecasts. The variation in forecasting problems and finding the analysts with required expertise in time series modeling is hard and time consuming process. Even with employed experts sometimes these analysis becomes very hectic and time consuming. To address these challenges, I describe a practical approach to forecast “at scale” that combines configurable models with analyst’s performance analysis. I propose an ensembling approach of 15+ traditional timeseries models with interpretable parameters that can be automatically tuned or can be intuitively adjusted by the experts. I also discuss performance analyses to compare, evaluate and select best between forecasting procedures. This Python based tool helps analyst to use their expertise most effectively by helping them with fast, reliable and practical forecasting of business time series (univariate/multivariate).
 
@@ -19,7 +19,7 @@ Demand forecasting will continue to be one of the most important elements of the
 Separate python modules with specific functionalities were deployed utilizing the techniques discussed in below mentioned section:
 
 ### ● Preprocessing of data - Anomaly Detection
-To detect Outliers using Density based Spatial Clustering Algorithm (DBSCAN) and Local Outlier Probabilities (LoOP) . To use mean value or implements the Kalman Filter, Kalman Smoother, and EM Algorithm for a Linear Gaussian model to carry out Missing values Imputation.
+To detect Outliers using Density based Spatial Clustering Algorithm (DBSCAN) and Local Outlier Probabilities (LoOP) . Incorporated mean value or implements the Kalman Filter, Kalman Smoother, and EM Algorithm for a Linear Gaussian model to carry out Missing values Imputation.
 
 ### ● Signal Frequency / Periodicity Detector
 To detect the timeseries (signal) frequency using techniques like Fourier Transformation, Auto correlation function, Harmonic Product Spectrum and Counting zero crossings. The calculated frequency is used as input for decomposing timeseries into its components
