@@ -1,7 +1,7 @@
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 import numpy as np
-import ml_metrics as met
+# import ml_metrics as met
 from sklearn import metrics
 
 def rmse(actual, prediction):
@@ -94,14 +94,14 @@ def rmsle(actual, prediction):
     diff = np.log1p(actual) - np.log1p(prediction)
     return sqrt(np.mean(np.square(diff)))
 
-def map_k(actual, prediction, k):
-    """
-    Calculate the Mean Average Precision of K (MAP@K) 
-    Source: https://www.kaggle.com/wendykan/map-k-demo
-    """
-    actual, prediction = np.array(actual), np.array(prediction)
-    ret = [met.apk([val],prediction[i:i+k],k) for i, val in enumerate(actual)]
-    return ret
+# def map_k(actual, prediction, k):
+#     """
+#     Calculate the Mean Average Precision of K (MAP@K) 
+#     Source: https://www.kaggle.com/wendykan/map-k-demo
+#     """
+#     actual, prediction = np.array(actual), np.array(prediction)
+#     ret = [met.apk([val],prediction[i:i+k],k) for i, val in enumerate(actual)]
+#     return ret
     
 def unlr(Y, Y_hat):
     n = Y_hat.shape[0]

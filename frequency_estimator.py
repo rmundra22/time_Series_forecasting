@@ -1,17 +1,23 @@
 from __future__ import division
-from numpy.fft import rfft
+
+import sys
 import pandas as pd
 import numpy as np
+
+from numpy.fft import rfft
 from numpy import argmax, mean, diff, log
-from matplotlib.mlab import find
 from scipy.signal import blackmanharris, fftconvolve
-import sys
 from sklearn import preprocessing
 
-class frequency_estimator:
+class FrequencyEstimator:
     
     def __init__(self, timeseries):
         self.timeseries = timeseries
+        
+    
+    def find(self, condition):
+        res, = np.nonzero(np.ravel(condition))
+        return res
 
         
     def parabolic(self, f, x):
@@ -42,7 +48,7 @@ class frequency_estimator:
         """
         sig = preprocessing.scale(self.timeseries)
         # Find all indices right before a rising-edge zero crossing
-        indices = find((sig[1:] >= 0) & (sig[:-1] < 0))
+        indices = self.find((sig[1:] >= 0) & (sig[:-1] < 0))
 
         # Naive (Measures 1000.185 Hz for 1000 Hz, for instance)
         # crossings = indices
@@ -87,7 +93,7 @@ class frequency_estimator:
 
         # Find the first low point
         d = diff(corr.flatten())
-        start = find(d > 0)[0]
+        start = self.find(d > 0)[0]
 
         # Find the next peak after the low point (other than 0 lag).  This bit is
         # not reliable for long signals, due to the desired peak occurring between

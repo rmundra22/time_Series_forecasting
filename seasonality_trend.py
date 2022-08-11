@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.tsa.seasonal import seasonal_decompose
 
-class SeasonalityDetection:
+class SeasonalityDetector:
     """
     Class for Seasonal decomposition using moving averages
     
@@ -147,8 +147,8 @@ class SeasonalityDetection:
         hp_cycle, hp_trend = self.hp_Filter()
         bk_cycle = self.bk_Filter()
         cf_cycle, cf_trend  = self.cf_Filter()
-        add_decomp = seasonal_decompose(self.timeseries, model = "additive", freq = self.periodicity)
-        mul_decomp = seasonal_decompose(self.timeseries, model = "multiplicative", freq = self.periodicity)
+        add_decomp = seasonal_decompose(self.timeseries, model = "additive", period = self.periodicity)
+        mul_decomp = seasonal_decompose(self.timeseries, model = "multiplicative", period = self.periodicity)
         self.trend_seasonal_dict.update({'add_decomp': [add_decomp.trend, add_decomp.seasonal]})
         self.trend_seasonal_dict.update({'mul_decomp': [mul_decomp.trend, mul_decomp.seasonal]})
         self.trend_seasonal_dict.update({'cf': [cf_trend, cf_cycle]})

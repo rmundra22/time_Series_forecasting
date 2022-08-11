@@ -1,6 +1,7 @@
 import pandas as pd
 import pyflux as pf
 import numpy as np
+
 from sys import maxsize
 from hyperopt import fmin, tpe, hp, STATUS_OK, STATUS_FAIL
 from math import exp, isnan
@@ -45,7 +46,7 @@ llnormalspace = {'integ': hp.choice('integ', range(0,4)),
                 }
 
 
-class benchmark_hyperopt:
+class BenchmarkHyperopter:
     """
     Class for hyperparameter tuning of benchmarking algorithms using hyperopt 
     Fit model Akaike Information Criterion(AIC) is considered in parameter tuning
@@ -71,7 +72,7 @@ class benchmark_hyperopt:
     4.aic value - float
     """
 
-    def __init__(self, steps, maxevals, arima_grid= arimaspace, garch_grid = garchspace, gas_grid = gasspace, ll_grid = llspace, llnormal_grid = llnormalspace):
+    def __init__(self, steps, maxevals, arima_grid = arimaspace, garch_grid = garchspace, gas_grid = gasspace, ll_grid = llspace, llnormal_grid = llnormalspace):
         # parameter grids are declared in the class 
         self.arima_grid = arima_grid
         self.garch_grid = garch_grid
@@ -98,18 +99,18 @@ class benchmark_hyperopt:
         self.aic = int(maxsize)
         self.modelbest = None
         
-        '''
-        defining fn for hyperopt optimization
-        --------------------------------
-        params: combination - list of parameters from the grid
-        loss: expression to be minimized
-        status: Set to STATUS_OK if loss is successfully computed, otherwise STATUS_FAIL 
-        '''
-        
         def func(params):
+            '''
+            defining fn for hyperopt optimization
+            --------------------------------
+            params: combination - list of parameters from the grid
+            loss: expression to be minimized
+            status: Set to STATUS_OK if loss is successfully computed, otherwise STATUS_FAIL 
+            '''
             model = pf.ARIMA(data=pd.DataFrame(timeseries), ar=params['p'], 
                              ma=params['q'], integ=params['d'])
-            x=model.fit(params['method'])
+            x = model.fit(params['method'])
+            
             if isnan(x.aic) or model.predict(self.steps).isna().sum().sum()>0:
                 return {'status':STATUS_FAIL}
             else:
@@ -128,8 +129,7 @@ class benchmark_hyperopt:
         max_evals: number of parameter combinations(repeated) evaluated before returning the bestmodel
         best: parameters of best model
         '''
-            
-        best = fmin(fn= func,space= self.arima_grid ,algo=tpe.suggest,max_evals= self.maxevals)
+        best = fmin(fn = func, space= self.arima_grid, algo=tpe.suggest, max_evals= self.maxevals)
         print( 'arima,  AIC:' +str(self.aic) + '   '+ str(best))
         return { 'arima' : [self.modelbest, self.order, self.aic, best]}
         

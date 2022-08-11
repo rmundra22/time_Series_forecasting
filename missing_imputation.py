@@ -5,12 +5,12 @@ from pykalman import KalmanFilter
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import Imputer
+from sklearn.impute import SimpleImputer
 from sklearn.model_selection import cross_val_score
 
 rng = np.random.RandomState(0)
 
-class DataImputation:
+class DataImputer:
     """
     Class to impute the missing value in the time series data
     + Mean
@@ -94,7 +94,7 @@ class DataImputation:
         y_missing = y_full.copy()
         # Fit all the transforms one after the other to data, then fit the transformed data using the final estimator
         # estimator : estimator object implementing ‘fit’ i.e. the object to use to fit the data.
-        estimator = Pipeline([("imputer", Imputer(missing_values=0, strategy="mean", axis=0)),
+        estimator = Pipeline([("imputer", SimpleImputer(missing_values=0, strategy="mean", axis=0)),
                               ("forest", RandomForestRegressor(random_state=0, n_estimators=100))])
         self.score['imputing_missinf_values'] = cross_val_score(estimator, X_missing, y_missing).mean()
 

@@ -1,26 +1,22 @@
-from importlib import reload
-import numpy as np
+import measures
 import pandas as pd
 import threading, time
-from PyNomaly import loop
-from sklearn.cluster import DBSCAN
-from missing_imputation import DataImputation
 import statsmodels.api as sm
-from seasonality_trend import SeasonalityDetection
-from benchmark_hyperopt import benchmark_hyperopt
-from benchmark_hyperopt2 import benchmark_hyperopt2
-from model_selection import prediction
-from math import sqrt
-import measures
-from sklearn.metrics import mean_squared_error
-from sys import maxsize
+import numpy as np
+np.warnings.filterwarnings('ignore')
+
 import matplotlib.pyplot as plt
 plt.rcParams['figure.figsize'] = (8.0, 6.0)
 
-np.warnings.filterwarnings('ignore')
- 
+from PyNomaly import loop
+from sklearn.cluster import DBSCAN
+from benchmark_hyperopt import BenchmarkHyperopter
+from benchmark_hyperopt2 import BenchmarkHyperopter2
+from model_selection import prediction
+from seasonality_trend import SeasonalityDetector
+from sys import maxsize 
 
-class forecasting:
+class Forecast:
     
     def __init__(self, timeseries, factor, steps, evals, ensemble_metric):
         self.timeseries = timeseries
@@ -65,7 +61,7 @@ class forecasting:
         """
         print("You are here in forecasting module preparing datasets for different models")
         index = self.timeseries.index
-        obj_sesnl = SeasonalityDetection(self.timeseries, periodicity)
+        obj_sesnl = SeasonalityDetector(self.timeseries, periodicity)
         obj_sesnl.trend_seasonal_comp()
         self.trend_seasonal_dict = obj_sesnl.trend_seasonal_dict
         
@@ -106,39 +102,40 @@ class forecasting:
     def parameter_tuning(self, periodicity):
         print("You are in forecasting module functionality parameter tuning part")
         # BENCH KERNEL 1 
-        obj_parameter_tuning = benchmark_hyperopt(self)#(self.steps, self.maxevals)
-        print("YAHI HOON MAIN")
+        obj_parameter_tuning = BenchmarkHyperopter(self.steps, self.maxevals)    
         a = time.time()
-        print("YOU ARE HERE MAN")
-        threading.Thread(target=self.model_dict.update(obj_parameter_tuning.arima(self.data_dict['seasonal_removed'][0]))).start()
-        threading.Thread(target=self.model_dict.update(obj_parameter_tuning.garch(self.data_dict['trend_removed'][0]))).start()
-        threading.Thread(target=self.model_dict.update(obj_parameter_tuning.egarch(self.data_dict['both_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.egarchm(self.data_dict['both_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.segarch(self.data_dict['both_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.segarchm(self.data_dict['both_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.gas(self.data_dict['seasonal_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.gasllev(self.data_dict['seasonal_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.gasllt(self.data_dict['seasonal_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.llev(self.data_dict['seasonal_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.llt(self.data_dict['seasonal_removed'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.nllev(self.timeseries))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.nllt(self.timeseries))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning.lmegarch(self.timeseries))).start()
+        
+        self.model_dict.update(obj_parameter_tuning.garch(self.data_dict['trend_removed'][0]))    
+         
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.arima(self.data_dict['seasonal_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.garch(self.data_dict['trend_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.egarch(self.data_dict['both_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.egarchm(self.data_dict['both_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.segarch(self.data_dict['both_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.segarchm(self.data_dict['both_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.gas(self.data_dict['seasonal_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.gasllev(self.data_dict['seasonal_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.gasllt(self.data_dict['seasonal_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.llev(self.data_dict['seasonal_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.llt(self.data_dict['seasonal_removed'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.nllev(self.timeseries))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.nllt(self.timeseries))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning.lmegarch(self.timeseries))).start()
         b = time.time()
         print("Time for tuning models of BENCH_HYPEROPT_1: ", round((b-a)/60, 2), " minutes")
         
         # BENCH KERNELS 2
-        obj_parameter_tuning2 = benchmark_hyperopt2(self.steps, self.maxevals, periodicity)
+        obj_parameter_tuning2 = BenchmarkHyperopter2(self.steps, self.maxevals, periodicity)
         a = time.time()
-        threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.wma(self.data_dict['original'][0]))).start()
-        threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.naive(self.data_dict['original'][0]))).start()
-        threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.drift(self.data_dict['original'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.linear(self.data_dict['original'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.additive(self.data_dict['original'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.multiplicative(self.data_dict['original'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.lin_decay(self.data_dict['original'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.exp_decay(self.data_dict['original'][0]))).start()
-#         threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.gaussian_decay(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.wma(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.naive(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.drift(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.linear(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.additive(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.multiplicative(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.lin_decay(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.exp_decay(self.data_dict['original'][0]))).start()
+        # threading.Thread(target=self.model_dict.update(obj_parameter_tuning2.gaussian_decay(self.data_dict['original'][0]))).start()
         b = time.time()
         print("Time for tuning models of BENCH_HYPEROPT_2: ", round((b-a)/60, 2), " minutes")
 

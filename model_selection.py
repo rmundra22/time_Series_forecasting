@@ -1,13 +1,9 @@
-import pandas as pd
-import pyflux as pf
-import numpy as np
-from math import sqrt
-from sklearn.metrics import mean_squared_error
 import measures
 import sys
-import statsmodels.api as sm
-from seasonality_trend import SeasonalityDetection
-from frequency_estimator import frequency_estimator
+import pandas as pd
+import numpy as np
+
+from seasonality_trend import SeasonalityDetector
 
 
 class prediction:
@@ -109,7 +105,7 @@ class prediction:
 
         """
         # Predicted Series after addition of forecasted seasonality component
-        obj = SeasonalityDetection(trainseries, self.periodicity)
+        obj = SeasonalityDetector(trainseries, self.periodicity)
         obj.trend_seasonal_comp()
         cf_cycle = obj.trend_seasonal_dict['cf'][1]
         cycle = cf_cycle[:self.periodicity]

@@ -1,9 +1,9 @@
 import pandas as pd
-import pyflux as pf
 import numpy as np
+import statsmodels.api as sm
+
 from sys import maxsize
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
-import statsmodels.api as sm
 from scipy.optimize import fmin_l_bfgs_b
 from math import exp, isnan, sqrt
 from kernels import Benchmarking
@@ -59,7 +59,7 @@ def RMSE(params, *args):
 
 
 
-class benchmark_hyperopt2:
+class BenchmarkHyperopter2:
     """
     Class contains benchmarking algorithms which will be used to
     measure the effectiveness of forecasting methods implemented
